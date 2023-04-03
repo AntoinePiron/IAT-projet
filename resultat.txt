@@ -1,0 +1,8 @@
+Entrainement sur 50 episodes 5000 steps:
+    - alpha = 0.5 --> score = 83
+
+Entrainement sur 100 episodes 5000 steps:
+    - alpha = 0.5 --> score = 7
+
+Entrainement sur 25 episodes 5000 steps:
+    - alpha = 1 --> score = 3

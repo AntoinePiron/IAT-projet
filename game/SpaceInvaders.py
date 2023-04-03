@@ -82,11 +82,28 @@ class SpaceInvaders():
         return pygame.surfarray.array3d(self.screen)
 
     def get_state(self):
-        """ A COMPLETER AVEC VOTRE ETAT
-        Cette méthode doit renvoyer l'état du système comme vous aurez choisi de
-        le représenter. Vous pouvez utiliser les accesseurs ci-dessus pour cela. 
+        """Création du state
+        Il est composé de :
+         - position du joueur
+         - position des aliens
+         - position et étaté du projectile
+         - image complète de l'écran
+
+        Returns:
+            list[tuple]: le state
         """
-        return "L'état n'est pas implémenté (SpaceInvaders.get_state)"
+        #On arrondi x au 16 ème supérieur
+        playerX = self._round_to(self.player_X, 16) #50 état possible
+        
+        invadersX = [self._round_to(x, 16) for x in self.invader_X]
+        invadersY = [self._round_to(y, 15) for y in self.invader_Y]
+        invadersPosition = list(zip(invadersX, invadersY))
+        
+        state = (
+            playerX,
+            invadersX[0],
+        )
+        return state
 
     def reset(self):
         """Reset the game at the initial state.
@@ -227,3 +244,6 @@ class SpaceInvaders():
     def isCollision(self, x1, x2, y1, y2):
         distance = math.sqrt((math.pow(x1 - x2,2)) + (math.pow(y1 - y2,2)))
         return (distance <= 50)
+    
+    def _round_to(self, x, base):
+        return int(round(float(x)/base)*base)
