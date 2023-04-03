@@ -59,10 +59,10 @@ class SpaceInvaders():
     def get_player_Y(self) -> int:
         return self.player_Y
 
-    def get_indavers_X(self) -> 'List[int]':
+    def get_indavers_X(self) -> list[int]:
         return self.invader_X
 
-    def get_indavers_Y(self) -> 'List[int]':
+    def get_indavers_Y(self) -> list[int]:
         return self.invader_Y
 
     def get_bullet_X(self) -> int:
@@ -142,7 +142,7 @@ class SpaceInvaders():
         if action == 2: # FIRE
             self.player_Xchange = 0
             # Fixing the change of direction of bullet
-            if self.bullet_state is "rest":
+            if self.bullet_state == "rest":
                 self.bullet_X = self.player_X
                 self.move_bullet(self.bullet_X, self.bullet_Y)
         if action == 3: # NO ACTION 
@@ -157,7 +157,7 @@ class SpaceInvaders():
         if self.bullet_Y <= 0:
             self.bullet_Y = 600
             self.bullet_state = "rest"
-        if self.bullet_state is "fire":
+        if self.bullet_state == "fire":
             self.move_bullet(self.bullet_X, self.bullet_Y)
             self.bullet_Y -= self.bullet_Ychange
     
