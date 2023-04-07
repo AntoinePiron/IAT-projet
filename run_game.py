@@ -6,23 +6,22 @@ from controller.qagent import QAgent
 
 def main():
 
-    game = SpaceInvaders(display=True)
+    game = SpaceInvaders(display=False)
     #controller = KeyboardController()
     #controller = RandomAgent(game.na)
-    controller = QAgent(game, 800, 800, alpha=1)
-    controller.learn(game, n_episodes=25, max_steps=5000)
+    controller = QAgent(game, alpha=0.75)
+    controller.learn(game, n_episodes=500, max_steps=5000)
     
-    print("Learning done !")
- 
-    state = game.reset()
+    newGame = SpaceInvaders(display=True)
+    state = newGame.reset()
     while True:
         action = controller.select_action(state)
-        state, reward, is_done = game.step(action)
+        state, reward, is_done = newGame.step(action)
         if(is_done):
             break
         sleep(0.0001)
     print("Game over !")
-    print("Score : ", game.score_val)
+    print("Score : ", newGame.score_val)
 
 if __name__ == '__main__' :
     main()

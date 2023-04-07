@@ -9,8 +9,8 @@ class EpsilonProfile:
         self.dec_step = dec_step        # amount of decrement of epsilon in each step
 
 class QAgent():
-    def __init__(self, game: SpaceInvaders,state_size: int, action_size: int, gamma: float=1, alpha: float = 0.2):
-        self.Q = np.zeros([state_size, action_size, game.na])
+    def __init__(self, game: SpaceInvaders, gamma: float=1, alpha: float = 0.2):
+        self.Q = np.zeros([41, 41, 31, game.na])
 
         self.game = game
         self.na = game.na
@@ -19,25 +19,24 @@ class QAgent():
         self.gamma = gamma
         self.alpha = alpha
 
-        self.eps_profile = EpsilonProfile(1.0, 0.2)
+        self.eps_profile = EpsilonProfile(1, 0.1)
         self.epsilon = self.eps_profile.initial
 
     def learn(self, env, n_episodes=1000, max_steps=200):
         n_steps = np.zeros(n_episodes) + max_steps
-        
         for episode in range(n_episodes):
             state = env.reset()
             for step in range(max_steps):
                 action = self.select_action(state)
                 next_state, reward, terminal = env.step(action)
-                print(f"Episode {episode} - Step {step} - Action {action} - Reward {reward} - Terminal {terminal}")
+                print(f"Episode {episode} - Step {step} - Action {action} - Reward {reward} - Terminal {terminal} - Epsilon {self.epsilon}")
                 self.updateQ(state, action, reward, next_state)
                 if terminal:
                     n_steps[episode] = step + 1  
                     break
-
                 state = next_state
             self.epsilon = max(self.epsilon - self.eps_profile.dec_episode / (n_episodes - 1.), self.eps_profile.final)
+        print(f"Learning done with parameters : gamma={self.gamma}, alpha={self.alpha}, episodes={n_episodes}, max_steps={max_steps}")
 
     def updateQ(self, state : tuple[int, int], action : int, reward : float, next_state : tuple[int, int]):
         new_q_value = (1 - self.alpha) * self.Q[state][action] + self.alpha * (reward + self.gamma * np.max(self.Q[next_state]))

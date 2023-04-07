@@ -1,3 +1,3 @@
-test_value = 523;
-rounded = int(round(test_value/15)*15)
+test_value = 800;
+rounded = int(round(test_value/20))
 print(rounded)
