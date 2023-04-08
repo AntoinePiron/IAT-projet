@@ -37,6 +37,8 @@ class QAgent():
                 state = next_state
             self.epsilon = max(self.epsilon - self.eps_profile.dec_episode / (n_episodes - 1.), self.eps_profile.final)
         print(f"Learning done with parameters : gamma={self.gamma}, alpha={self.alpha}, episodes={n_episodes}, max_steps={max_steps}")
+        unique_path = f"qtable_{self.gamma}_{self.alpha}_{n_episodes}_{max_steps}.npy"
+        self.save(unique_path)
 
     def updateQ(self, state : tuple[int, int], action : int, reward : float, next_state : tuple[int, int]):
         new_q_value = (1 - self.alpha) * self.Q[state][action] + self.alpha * (reward + self.gamma * np.max(self.Q[next_state]))
@@ -49,7 +51,12 @@ class QAgent():
             action = self.select_greedy_action(state)
         return action
 
-
     def select_greedy_action(self, state : tuple[int, int]):
         mx = np.max(self.Q[state])
         return np.random.choice(np.where(self.Q[state] == mx)[0])
+    
+    def save(self, path):
+        np.save(path, self.Q)
+    
+    def load(self, path):
+        self.Q = np.load(path)
